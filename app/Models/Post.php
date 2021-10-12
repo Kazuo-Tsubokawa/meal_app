@@ -2,19 +2,28 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
 {
     use HasFactory;
 
-    public function users()
+    protected $fillable = [
+        'title',
+        'body',
+        'category_id',
+        'user_id'
+    ];
+
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function categories()
+    public function category()
     {
         return $this->belongsTo(Category::class);
     }
@@ -23,4 +32,15 @@ class Post extends Model
     {
         return $this->hasMany(Like::class);
     }
+
+    public function getImagePathAttribute()
+    {
+        return 'images/posts/' . $this->image;
+    }
+
+    public function getImageUrlAttribute()
+    {
+        return Storage::url($this->image_path);
+    }
+
 }
