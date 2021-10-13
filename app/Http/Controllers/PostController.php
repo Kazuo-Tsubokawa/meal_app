@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
 use App\Models\Category;
+use App\Models\Like;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+
 
 class PostController extends Controller
 {
@@ -78,8 +81,13 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('posts.show', compact('post'));
+        if (Auth::check()) {
+            $like = Like::with('post')->where('post_id', $post->id)->where('user_id', auth()->user()->id)->first();
+            return view('posts.show', compact('post', 'like'));
+        } else
+            return view('posts.show', compact('post'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
