@@ -21,6 +21,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::with('user')->latest()->paginate(10);
+
         return view('posts.index', compact('posts'));
     }
 
@@ -32,6 +33,7 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
+
         return view('posts.create', compact('categories'));
     }
 
@@ -85,6 +87,7 @@ class PostController extends Controller
             $like = Like::with('post')->where('post_id', $post->id)->where('user_id', auth()->user()->id)->first();
             return view('posts.show', compact('post', 'like'));
         } else
+
             return view('posts.show', compact('post'));
     }
 
@@ -98,6 +101,7 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
+        
         return view('posts.edit', compact('post', 'categories'));
     }
 
