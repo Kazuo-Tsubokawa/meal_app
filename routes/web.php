@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\PostController;
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +16,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [PostController::class, 'index'])
+    ->name('root');
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+Route::resource('posts', PostController::class)
+    ->only(['create', 'store', 'edit', 'update', 'destroy'])
+    ->middleware('auth');
+
+Route::resource('posts', PostController::class)
+    ->only(['show', 'index']);
+
+
+Route::resource('posts.likes', LikeController::class)
+    ->only(['store', 'destroy'])
+    ->middleware('auth');
+
+require __DIR__ . '/auth.php';
