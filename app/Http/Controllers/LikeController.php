@@ -14,6 +14,7 @@ class LikeController extends Controller
         $like = new Like();
         $like->post_id = $post->id;
         $like->user_id = Auth::user()->id;
+
         $like->save();
 
         return redirect()
@@ -25,6 +26,7 @@ class LikeController extends Controller
     {
         $user = Auth::user()->id;
         $like = Like::where('post_id', $post->id)->where('user_id', $user)->first();
+        
         $like->delete();
         
         return redirect()
