@@ -11,6 +11,8 @@ class LikeController extends Controller
 {
     public function store(Post $post, Request $request, Like $like)
     {
+        //二重登録問題
+        $request->session()->regenerateToken();
         $like = new Like();
         $like->post_id = $post->id;
         $like->user_id = Auth::user()->id;
